@@ -51,8 +51,7 @@ class StatisticsUtilsTest {
     }
 
 
-    // If there's 0 completed tasks and 1 active tasks,
-    // then there are 0% completed tasks and 100% active tasks.
+    // If tasks are null, then there are 0% completed tasks and 0% active tasks.
     @Test
     fun getActiveAndCompletedStats_error_returnsZeros() {
         val tasks = null
