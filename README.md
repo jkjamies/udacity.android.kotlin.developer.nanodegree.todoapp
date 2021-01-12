@@ -9,3 +9,5 @@ Test (Local tests) vs AndroidTest (Instrumented tests) (Test is faster with lowe
 \
 Alt+Enter on function can generate test, or right click->generate->test\
 \
+Use TDD (Test-Driven-Development) to find/confirm issue by writing test, then fix/enhance code\
+\
