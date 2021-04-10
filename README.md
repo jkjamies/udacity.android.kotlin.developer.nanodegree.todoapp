@@ -32,4 +32,3 @@ Swapping AndroidJUnit4 runner* - the runner dependency/dependencies are tied to 
 InstantTaskExecutorRule for LiveData testing - classes define some code that runs before and after each test runs. If you need to test LiveData and ensure test results are synchronous\
 and in a repeatable order, use this rule, as it is done on the same thread.\
 Use the LiveDataTestUtil.kt file to keep the testing of LiveData simple and boiler plate code to a minimum in test files.\
-\
