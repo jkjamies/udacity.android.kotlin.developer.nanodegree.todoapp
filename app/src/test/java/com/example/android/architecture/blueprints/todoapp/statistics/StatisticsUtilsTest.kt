@@ -5,19 +5,25 @@ import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.*
 import org.junit.Test
 
+//http://hamcrest.org/
+//https://truth.dev/
+
 class StatisticsUtilsTest {
 
     // If there's 0 completed tasks and 1 active tasks,
     // then there are 0% completed tasks and 100% active tasks.
     @Test
     fun getActiveAndCompletedStats_notCompleted_returnsHundredZero() {
+        // GIVEN
         val tasks = listOf<Task>(
                 Task("title", "description", isCompleted = false)
         )
 
+        // WHEN
         // When the list of tasks is computed with an active task
         val result = getActiveAndCompletedStats(tasks)
 
+        // THEN
         // Then the percentages are 100 and 0
         assertThat(result.activeTasksPercent, `is`(100f))
         assertThat(result.completedTasksPercent, `is`(0f))
