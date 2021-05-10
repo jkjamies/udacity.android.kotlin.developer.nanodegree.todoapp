@@ -31,4 +31,46 @@ Swapping AndroidJUnit4 runner* - the runner dependency/dependencies are tied to 
 \
 InstantTaskExecutorRule for LiveData testing - classes define some code that runs before and after each test runs. If you need to test LiveData and ensure test results are synchronous\
 and in a repeatable order, use this rule, as it is done on the same thread.\
-Use the LiveDataTestUtil.kt file to keep the testing of LiveData simple and boiler plate code to a minimum in test files.
+Use the LiveDataTestUtil.kt file to keep the testing of LiveData simple and boiler plate code to a minimum in test files.\
+\
+Unit tests are highly focused, so the repository has complicated dependencies\
+Solution: make fake dependencies\
+Test Doubles:\
+Fake - A test double that has a "working" implementation of the class, but it's implemented in a way that makes it good for tests but unsuitable for production\
+Mock - A test double that tracks which of its methods were called. It then passes or fails a test depending on whether it's methods were called correctly.\
+Stub - A test double that includes no logic and only returns what you program it to return. A StubTaskRepository could be programmed to return certain combinations of tasks from getTasks for example.\
+Dummy - A test double that is passed around but not used, such as if you just need to provide it as a parameter. If you had a DummyTaskRepository, it would just implement the TaskRepository with no code in any of the methods.\
+Spy - A test double which also keeps tracks of some additional information; for example, if you made a SpyTaskRepository, it might keep track of the number of times the addTask method was called.\
+Check here for more information: https://testing.googleblog.com/2013/07/testing-on-toilet-know-your-test-doubles.html \
+\
+Dependency Injection\
+Constructor Injection\
+Forced to choose dependencies, starts with correct dependency - update constructor, main code uses real data source, test code uses fake data source\
+Not for injecting into activities and fragments because no easy way to change constructor (using FragmentScenario)\
+Setter Injection\
+Need to set dependency each time you make an instance of a class\
+Documentation: https://developer.android.com/training/dependency-injection \
+\
+Need to have an common interface for the fake and real class (can right click class, refactor, extract interface)\
+\
+You can create a single generic ViewModelFactory that can generate any view model (sample: https://github.com/android/architecture-samples/tree/reactive)\
+needed and an extension function (https://github.com/googlesamples/android-architecture/blob/reactive/app/src/main/java/com/example/android/architecture/blueprints/todoapp/util/FragmentExt.kt)\
+\
+Fragment Integration Tests (since they are visual, you want to render it) - empty activity, test fragment/viewmodel, test double fake repository\
+FragmentScenario\
+AndroidX Test library to create fragments. Gives control over starting state and lifecycle. Compatible with both local and instrumented tests.\
+Service Locator pattern\
+A singleton whose purpose is to store and provide dependencies. Setter Injection requires setting dependency each time you make an instance of a class, but for service locator pattern you set all dependencies in beginning and used to be sure they are used everywhere.\
+Only want one instance, so to make sure of this add it to the Application class. Use annotation @VisibleForTesting set - says to not use the set in the class but for testing it is needed.\
+Espresso\
+Android UI testing library used to interact with views and check their state. 4 parts - static espresso method, ViewMatcher, ViewAction, ViewAssertion. It is best to turn off animations, disable window animation scale, transition animation scale, and animator duration scale.\
+Static Espresso Method: https://developer.android.com/reference/androidx/test/espresso/Espresso.html#onView%28org.hamcrest.Matcher%3Candroid.view.View%3E%29 \
+ViewMatchers: https://developer.android.com/reference/androidx/test/espresso/matcher/ViewMatchers.html \
+ViewAction: https://developer.android.com/reference/androidx/test/espresso/ViewAction.html \
+ViewAssertion: https://developer.android.com/reference/androidx/test/espresso/assertion/ViewAssertions#matches \
+Mockito & Testing Navigation\
+Mockito is a framework for making test doubles but does makes more than just mocks. Mock is a test double that tracks which of its methods were called. Pass or fail a test depending on whether their methods were called correctly. Great for testing something like when a navigation occurs, for example.\
+Mockito creates NavController mock, attach that mocked NavController to the fragment, then verify navigate() called with correct action and parameters.\
+\
+Generally you can annotate @SmallTest on unit tests, @MediumTest on instrumented tests, and @LargeTest for End-To-End (E2E) tests\
+\
